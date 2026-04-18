@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Simge - Aşkın Olayım">
+  <rect width="640" height="640" fill="#2d232e"/>
+  <rect x="34" y="34" width="572" height="572" rx="34" fill="none" stroke="#f7b801" stroke-width="10"/>
+  <path d="M70 480 C170 390 236 548 334 438 C424 336 484 432 570 346" fill="none" stroke="#f7b801" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="496" cy="132" r="54" fill="#f7b801"/>
+  <text x="70" y="160" fill="#f7f8f6" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="800">S</text>
+  <text x="70" y="238" fill="#f7b801" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">POP #42</text>
+  <text x="70" y="330" fill="#f7f8f6" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800">Aşkın Olayım</text>
+  <text x="70" y="560" fill="#f7f8f6" opacity="0.78" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Simge</text>
+</svg>

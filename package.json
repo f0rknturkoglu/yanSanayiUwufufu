@@ -1,0 +1,37 @@
+{
+  "name": "yansanayiuwufufu",
+  "version": "1.0.0",
+  "description": "Offline UwUFUFU-style bracket game for Turkish pop and rap songs.",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "build": "tsc -b && npm run validate:packs && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "validate:packs": "node scripts/validate-packs.mjs",
+    "generate:covers": "node scripts/generate-covers.mjs",
+    "import:kworb": "node scripts/import-kworb-candidates.mjs",
+    "import:youtube": "node scripts/import-youtube-playlist.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.0.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.8",
+    "vitest": "^4.1.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "yanSanayi UwUFUFU",
+  "short_name": "UwUFUFU",
+  "description": "Offline-first Türkçe pop ve rap bracket oyunu.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f7f7",
+  "theme_color": "#e84855",
+  "icons": [
+    {
+      "src": "/packs/fallback-cover.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

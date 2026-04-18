@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Çakal &amp; Reckol - Glock">
+  <rect width="640" height="640" fill="#203a3d"/>
+  <rect x="34" y="34" width="572" height="572" rx="34" fill="none" stroke="#1f8a70" stroke-width="10"/>
+  <path d="M70 480 C170 390 236 548 334 438 C424 336 484 432 570 346" fill="none" stroke="#1f8a70" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="496" cy="132" r="54" fill="#1f8a70"/>
+  <text x="70" y="160" fill="#f7f8f6" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="800">ÇR</text>
+  <text x="70" y="238" fill="#1f8a70" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">RAP #27</text>
+  <text x="70" y="330" fill="#f7f8f6" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800">Glock</text>
+  <text x="70" y="560" fill="#f7f8f6" opacity="0.78" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Çakal &amp; Reckol</text>
+</svg>

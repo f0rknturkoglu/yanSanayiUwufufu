@@ -1,0 +1,665 @@
+{
+  "schemaVersion": 1,
+  "id": "tr-pop-rap",
+  "title": "Türkçe Pop / Rap",
+  "description": "Offline oynanacak ilk paket: Türkiye chart geçmişinden ve manuel Türkçe pop/rap seçkisinden 64 aday.",
+  "defaultBracketSize": 64,
+  "generatedAt": "2026-04-18T00:00:00.000Z",
+  "sourceRefs": [
+    {
+      "label": "Spotify Charts methodology",
+      "url": "https://support.spotify.com/ci-en/artists/article/understanding-spotify-charts/"
+    },
+    {
+      "label": "Kworb Spotify Turkey totals",
+      "url": "https://kworb.net/spotify/country/tr_daily_totals.html",
+      "retrievedAt": "2026-04-18"
+    },
+    {
+      "label": "Manual Türkçe pop/rap review",
+      "url": "data/manual/tr-pop-rap-overrides.csv"
+    }
+  ],
+  "items": [
+    {
+      "id": "ezhel-geceler",
+      "title": "Geceler",
+      "artist": "Ezhel",
+      "category": "turkish-rap",
+      "year": 2017,
+      "rankScore": 1000,
+      "imagePath": "packs/tr-pop-rap/covers/ezhel-geceler.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "ezhel-felaket",
+      "title": "Felaket",
+      "artist": "Ezhel",
+      "category": "turkish-rap",
+      "year": 2019,
+      "rankScore": 990,
+      "imagePath": "packs/tr-pop-rap/covers/ezhel-felaket.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "ezhel-murda-aya",
+      "title": "Aya",
+      "artist": "Ezhel & Murda",
+      "category": "turkish-rap",
+      "year": 2019,
+      "rankScore": 980,
+      "imagePath": "packs/tr-pop-rap/covers/ezhel-murda-aya.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "uzi-arasan-da",
+      "title": "ARASAN DA",
+      "artist": "UZI",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 970,
+      "imagePath": "packs/tr-pop-rap/covers/uzi-arasan-da.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "uzi-krvn",
+      "title": "Krvn",
+      "artist": "UZI",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 960,
+      "imagePath": "packs/tr-pop-rap/covers/uzi-krvn.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "uzi-umrumda-degil",
+      "title": "Umrumda Değil",
+      "artist": "UZI",
+      "category": "turkish-rap",
+      "year": 2019,
+      "rankScore": 950,
+      "imagePath": "packs/tr-pop-rap/covers/uzi-umrumda-degil.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "motive-10-mg",
+      "title": "10 MG",
+      "artist": "Motive",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 940,
+      "imagePath": "packs/tr-pop-rap/covers/motive-10-mg.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "blok3-affetmem",
+      "title": "AFFETMEM",
+      "artist": "BLOK3",
+      "category": "turkish-rap",
+      "year": 2023,
+      "rankScore": 930,
+      "imagePath": "packs/tr-pop-rap/covers/blok3-affetmem.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "lvbel-c5-sezen-aksu",
+      "title": "Sezen Aksu",
+      "artist": "Lvbel C5",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 920,
+      "imagePath": "packs/tr-pop-rap/covers/lvbel-c5-sezen-aksu.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "lvbel-c5-havhavhav",
+      "title": "HAVHAVHAV",
+      "artist": "Lvbel C5",
+      "category": "turkish-rap",
+      "year": 2024,
+      "rankScore": 910,
+      "imagePath": "packs/tr-pop-rap/covers/lvbel-c5-havhavhav.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "sefo-bilmem-mi",
+      "title": "Bilmem Mi?",
+      "artist": "Sefo",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 900,
+      "imagePath": "packs/tr-pop-rap/covers/sefo-bilmem-mi.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "sefo-tutsak",
+      "title": "Tutsak",
+      "artist": "Sefo",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 890,
+      "imagePath": "packs/tr-pop-rap/covers/sefo-tutsak.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "gazapizm-heyecani-yok",
+      "title": "Heyecanı Yok",
+      "artist": "Gazapizm",
+      "category": "turkish-rap",
+      "year": 2017,
+      "rankScore": 880,
+      "imagePath": "packs/tr-pop-rap/covers/gazapizm-heyecani-yok.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "gazapizm-unutulacak-dunler",
+      "title": "Unutulacak Dünler",
+      "artist": "Gazapizm",
+      "category": "turkish-rap",
+      "year": 2020,
+      "rankScore": 870,
+      "imagePath": "packs/tr-pop-rap/covers/gazapizm-unutulacak-dunler.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "ceza-holocaust",
+      "title": "Holocaust",
+      "artist": "Ceza",
+      "category": "turkish-rap",
+      "year": 2004,
+      "rankScore": 860,
+      "imagePath": "packs/tr-pop-rap/covers/ceza-holocaust.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "ceza-suspus",
+      "title": "Suspus",
+      "artist": "Ceza",
+      "category": "turkish-rap",
+      "year": 2015,
+      "rankScore": 850,
+      "imagePath": "packs/tr-pop-rap/covers/ceza-suspus.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "sagopa-kajmer-avutsun-bahaneler",
+      "title": "Avutsun Bahaneler",
+      "artist": "Sagopa Kajmer",
+      "category": "turkish-rap",
+      "year": 2004,
+      "rankScore": 840,
+      "imagePath": "packs/tr-pop-rap/covers/sagopa-kajmer-avutsun-bahaneler.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "sagopa-kajmer-galiba",
+      "title": "Galiba",
+      "artist": "Sagopa Kajmer",
+      "category": "turkish-rap",
+      "year": 2004,
+      "rankScore": 830,
+      "imagePath": "packs/tr-pop-rap/covers/sagopa-kajmer-galiba.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "norm-ender-mekanin-sahibi",
+      "title": "Mekanın Sahibi",
+      "artist": "Norm Ender",
+      "category": "turkish-rap",
+      "year": 2019,
+      "rankScore": 820,
+      "imagePath": "packs/tr-pop-rap/covers/norm-ender-mekanin-sahibi.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "ben-fero-demet-akalin",
+      "title": "Demet Akalın",
+      "artist": "Ben Fero",
+      "category": "turkish-rap",
+      "year": 2019,
+      "rankScore": 810,
+      "imagePath": "packs/tr-pop-rap/covers/ben-fero-demet-akalin.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "ben-fero-3-2-1",
+      "title": "3 2 1",
+      "artist": "Ben Fero",
+      "category": "turkish-rap",
+      "year": 2019,
+      "rankScore": 800,
+      "imagePath": "packs/tr-pop-rap/covers/ben-fero-3-2-1.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "murda-gece-gunduz",
+      "title": "Gece Gündüz",
+      "artist": "Murda",
+      "category": "turkish-rap",
+      "year": 2020,
+      "rankScore": 790,
+      "imagePath": "packs/tr-pop-rap/covers/murda-gece-gunduz.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "murda-bi-sonraki-hayatimda-gel",
+      "title": "Bi Sonraki Hayatımda Gel",
+      "artist": "Murda",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 780,
+      "imagePath": "packs/tr-pop-rap/covers/murda-bi-sonraki-hayatimda-gel.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "cakal-imdat",
+      "title": "İmdat",
+      "artist": "Çakal",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 770,
+      "imagePath": "packs/tr-pop-rap/covers/cakal-imdat.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "cakal-pisman",
+      "title": "Pişman",
+      "artist": "Çakal",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 760,
+      "imagePath": "packs/tr-pop-rap/covers/cakal-pisman.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "reckol-istedigim-olucak",
+      "title": "İstediğim Olucak",
+      "artist": "Reckol",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 750,
+      "imagePath": "packs/tr-pop-rap/covers/reckol-istedigim-olucak.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "cakal-reckol-glock",
+      "title": "Glock",
+      "artist": "Çakal & Reckol",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 740,
+      "imagePath": "packs/tr-pop-rap/covers/cakal-reckol-glock.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "muti-aradem",
+      "title": "ARADEM",
+      "artist": "Muti",
+      "category": "turkish-rap",
+      "year": 2020,
+      "rankScore": 730,
+      "imagePath": "packs/tr-pop-rap/covers/muti-aradem.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "heijan-yansin-geceler",
+      "title": "Yansın Geceler",
+      "artist": "Heijan",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 720,
+      "imagePath": "packs/tr-pop-rap/covers/heijan-yansin-geceler.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "organize-kaptan",
+      "title": "Kaptan",
+      "artist": "Organize",
+      "category": "turkish-rap",
+      "year": 2022,
+      "rankScore": 710,
+      "imagePath": "packs/tr-pop-rap/covers/organize-kaptan.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "batuflex-dalga",
+      "title": "Dalga",
+      "artist": "Batuflex",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 700,
+      "imagePath": "packs/tr-pop-rap/covers/batuflex-dalga.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "bege-2t1bb",
+      "title": "2T1BB",
+      "artist": "BEGE",
+      "category": "turkish-rap",
+      "year": 2021,
+      "rankScore": 690,
+      "imagePath": "packs/tr-pop-rap/covers/bege-2t1bb.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "semicenk-unutmak-oyle-kolay-mi-sandin",
+      "title": "Unutmak Öyle Kolay Mı Sandın",
+      "artist": "Semicenk",
+      "category": "turkish-pop",
+      "year": 2021,
+      "rankScore": 680,
+      "imagePath": "packs/tr-pop-rap/covers/semicenk-unutmak-oyle-kolay-mi-sandin.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "semicenk-duser-aklima",
+      "title": "Düşer Aklıma",
+      "artist": "Semicenk",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 670,
+      "imagePath": "packs/tr-pop-rap/covers/semicenk-duser-aklima.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "mabel-matiz-antidepresan",
+      "title": "Antidepresan",
+      "artist": "Mabel Matiz & Mert Demir",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 660,
+      "imagePath": "packs/tr-pop-rap/covers/mabel-matiz-antidepresan.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "mabel-matiz-oyle-kolaysa",
+      "title": "Öyle Kolaysa",
+      "artist": "Mabel Matiz",
+      "category": "turkish-pop",
+      "year": 2018,
+      "rankScore": 650,
+      "imagePath": "packs/tr-pop-rap/covers/mabel-matiz-oyle-kolaysa.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "edis-martilar",
+      "title": "Martılar",
+      "artist": "Edis",
+      "category": "turkish-pop",
+      "year": 2021,
+      "rankScore": 640,
+      "imagePath": "packs/tr-pop-rap/covers/edis-martilar.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "edis-ariyorum",
+      "title": "Arıyorum",
+      "artist": "Edis",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 630,
+      "imagePath": "packs/tr-pop-rap/covers/edis-ariyorum.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "zeynep-bastik-uslanmiyor-bu",
+      "title": "Uslanmıyor Bu",
+      "artist": "Zeynep Bastık",
+      "category": "turkish-pop",
+      "year": 2019,
+      "rankScore": 620,
+      "imagePath": "packs/tr-pop-rap/covers/zeynep-bastik-uslanmiyor-bu.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "zeynep-bastik-lan",
+      "title": "Lan",
+      "artist": "Zeynep Bastık",
+      "category": "turkish-pop",
+      "year": 2024,
+      "rankScore": 610,
+      "imagePath": "packs/tr-pop-rap/covers/zeynep-bastik-lan.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "aleyna-tilki-cevapsiz-cinlama",
+      "title": "Cevapsız Çınlama",
+      "artist": "Aleyna Tilki",
+      "category": "turkish-pop",
+      "year": 2016,
+      "rankScore": 600,
+      "imagePath": "packs/tr-pop-rap/covers/aleyna-tilki-cevapsiz-cinlama.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "simge-askin-olayim",
+      "title": "Aşkın Olayım",
+      "artist": "Simge",
+      "category": "turkish-pop",
+      "year": 2018,
+      "rankScore": 590,
+      "imagePath": "packs/tr-pop-rap/covers/simge-askin-olayim.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "simge-yanki",
+      "title": "Yankı",
+      "artist": "Simge",
+      "category": "turkish-pop",
+      "year": 2016,
+      "rankScore": 580,
+      "imagePath": "packs/tr-pop-rap/covers/simge-yanki.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "hadise-feryat",
+      "title": "Feryat",
+      "artist": "Hadise",
+      "category": "turkish-pop",
+      "year": 2023,
+      "rankScore": 570,
+      "imagePath": "packs/tr-pop-rap/covers/hadise-feryat.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "hadise-hay-hay",
+      "title": "Hay Hay",
+      "artist": "Hadise",
+      "category": "turkish-pop",
+      "year": 2021,
+      "rankScore": 560,
+      "imagePath": "packs/tr-pop-rap/covers/hadise-hay-hay.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "gulsen-bangir-bangir",
+      "title": "Bangır Bangır",
+      "artist": "Gülşen",
+      "category": "turkish-pop",
+      "year": 2015,
+      "rankScore": 550,
+      "imagePath": "packs/tr-pop-rap/covers/gulsen-bangir-bangir.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "gulsen-lolipop",
+      "title": "Lolipop",
+      "artist": "Gülşen",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 540,
+      "imagePath": "packs/tr-pop-rap/covers/gulsen-lolipop.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "tarkan-simarik",
+      "title": "Şımarık",
+      "artist": "Tarkan",
+      "category": "turkish-pop",
+      "year": 1997,
+      "rankScore": 530,
+      "imagePath": "packs/tr-pop-rap/covers/tarkan-simarik.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "tarkan-geccek",
+      "title": "Geççek",
+      "artist": "Tarkan",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 520,
+      "imagePath": "packs/tr-pop-rap/covers/tarkan-geccek.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "kenan-dogulu-yosun",
+      "title": "Yosun",
+      "artist": "Kenan Doğulu",
+      "category": "turkish-pop",
+      "year": 2021,
+      "rankScore": 510,
+      "imagePath": "packs/tr-pop-rap/covers/kenan-dogulu-yosun.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "hande-yener-beni-sev",
+      "title": "Beni Sev",
+      "artist": "Hande Yener",
+      "category": "turkish-pop",
+      "year": 2016,
+      "rankScore": 500,
+      "imagePath": "packs/tr-pop-rap/covers/hande-yener-beni-sev.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "hande-yener-mor",
+      "title": "Mor",
+      "artist": "Hande Yener",
+      "category": "turkish-pop",
+      "year": 2016,
+      "rankScore": 490,
+      "imagePath": "packs/tr-pop-rap/covers/hande-yener-mor.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "murat-boz-janti",
+      "title": "Janti",
+      "artist": "Murat Boz",
+      "category": "turkish-pop",
+      "year": 2016,
+      "rankScore": 480,
+      "imagePath": "packs/tr-pop-rap/covers/murat-boz-janti.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "irem-derici-kalbimin-tek-sahibine",
+      "title": "Kalbimin Tek Sahibine",
+      "artist": "İrem Derici",
+      "category": "turkish-pop",
+      "year": 2014,
+      "rankScore": 470,
+      "imagePath": "packs/tr-pop-rap/covers/irem-derici-kalbimin-tek-sahibine.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "irem-derici-yaz-gulu",
+      "title": "Yaz Gülü",
+      "artist": "İrem Derici",
+      "category": "turkish-pop",
+      "year": 2023,
+      "rankScore": 460,
+      "imagePath": "packs/tr-pop-rap/covers/irem-derici-yaz-gulu.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "merve-ozbey-vuracak",
+      "title": "Vuracak",
+      "artist": "Merve Özbey",
+      "category": "turkish-pop",
+      "year": 2019,
+      "rankScore": 450,
+      "imagePath": "packs/tr-pop-rap/covers/merve-ozbey-vuracak.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "merve-ozbey-helal-ettim",
+      "title": "Helal Ettim",
+      "artist": "Merve Özbey",
+      "category": "turkish-pop",
+      "year": 2020,
+      "rankScore": 440,
+      "imagePath": "packs/tr-pop-rap/covers/merve-ozbey-helal-ettim.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "mert-demir-atese-dustum",
+      "title": "Ateşe Düştüm",
+      "artist": "Mert Demir",
+      "category": "turkish-pop",
+      "year": 2023,
+      "rankScore": 430,
+      "imagePath": "packs/tr-pop-rap/covers/mert-demir-atese-dustum.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "mert-demir-cehennemin-dibi",
+      "title": "Cehennemin Dibi",
+      "artist": "Mert Demir",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 420,
+      "imagePath": "packs/tr-pop-rap/covers/mert-demir-cehennemin-dibi.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "gunes-suclarimdan-biri",
+      "title": "Suçlarımdan Biri",
+      "artist": "Güneş",
+      "category": "turkish-pop",
+      "year": 2021,
+      "rankScore": 410,
+      "imagePath": "packs/tr-pop-rap/covers/gunes-suclarimdan-biri.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "gunes-nkbi",
+      "title": "NKBİ",
+      "artist": "Güneş",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 400,
+      "imagePath": "packs/tr-pop-rap/covers/gunes-nkbi.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "emir-can-igrek-nalan",
+      "title": "Nalan",
+      "artist": "Emir Can İğrek",
+      "category": "turkish-pop",
+      "year": 2019,
+      "rankScore": 390,
+      "imagePath": "packs/tr-pop-rap/covers/emir-can-igrek-nalan.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "emir-can-igrek-kor",
+      "title": "Kor",
+      "artist": "Emir Can İğrek",
+      "category": "turkish-pop",
+      "year": 2022,
+      "rankScore": 380,
+      "imagePath": "packs/tr-pop-rap/covers/emir-can-igrek-kor.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    },
+    {
+      "id": "melike-sahin-tutusmus-beraber",
+      "title": "Tutuşmuş Beraber",
+      "artist": "Melike Şahin",
+      "category": "turkish-pop",
+      "year": 2021,
+      "rankScore": 370,
+      "imagePath": "packs/tr-pop-rap/covers/melike-sahin-tutusmus-beraber.svg",
+      "sourceRefs": [{ "label": "Kworb seed + manual review" }]
+    }
+  ]
+}
