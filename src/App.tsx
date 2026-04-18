@@ -623,18 +623,49 @@ function Matchup({
   game: GameState;
   onPick: (itemId: string) => void;
 }) {
+  const [swipedSide, setSwipedSide] = useState<"left" | "right" | null>(null);
+  const startXRef = useRef<number | null>(null);
+  const startYRef = useRef<number | null>(null);
+
+  function handleTouchStart(e: React.TouchEvent<HTMLDivElement>) {
+    startXRef.current = e.touches[0].clientX;
+    startYRef.current = e.touches[0].clientY;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent<HTMLDivElement>) {
+    if (startXRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - startXRef.current;
+    const deltaY = startYRef.current !== null ? e.changedTouches[0].clientY - startYRef.current : 0;
+    startXRef.current = null;
+    startYRef.current = null;
+
+    if (Math.abs(deltaX) < 40 || Math.abs(deltaY) > Math.abs(deltaX)) return;
+
+    setSwipedSide(deltaX > 0 ? "right" : "left");
+    const pickedId = deltaX > 0 ? rightItem.id : leftItem.id;
+    setTimeout(() => {
+      setSwipedSide(null);
+      onPick(pickedId);
+    }, 280);
+  }
+
   return (
-    <div className="matchup" data-round={game.currentRoundIndex}>
-      <SongChoice item={leftItem} side="left" onPick={onPick} />
+    <div
+      className="matchup"
+      data-round={game.currentRoundIndex}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <SongChoice item={leftItem} side="left" onPick={onPick} swipedOut={swipedSide === "right"} />
       <div className="versus" aria-hidden="true">
         VS
       </div>
-      <SongChoice item={rightItem} side="right" onPick={onPick} />
+      <SongChoice item={rightItem} side="right" onPick={onPick} swipedOut={swipedSide === "left"} />
     </div>
   );
 }
 
-function SongChoice({ item, side, onPick }: { item: PackItem; side: "left" | "right"; onPick: (itemId: string) => void }) {
+function SongChoice({ item, side, onPick, swipedOut }: { item: PackItem; side: "left" | "right"; onPick: (itemId: string) => void; swipedOut?: boolean }) {
   if (isYouTubeItem(item)) {
     return (
       <article className={`youtube-choice youtube-${side}`}>
@@ -663,7 +694,7 @@ function SongChoice({ item, side, onPick }: { item: PackItem; side: "left" | "ri
   }
 
   return (
-    <button className={`choice-card choice-${side}`} type="button" onClick={() => onPick(item.id)}>
+    <button className={`choice-card choice-${side}${swipedOut ? " choice-swiped-out" : ""}`} type="button" onClick={() => onPick(item.id)}>
       <span className="choice-image-wrap">
         <img src={getArtworkSrc(item)} alt={`${item.artist} - ${item.title}`} onError={handleImageFallback} />
       </span>

@@ -548,6 +548,13 @@ h2 {
   box-shadow: 0 22px 52px rgba(18, 20, 22, 0.15);
 }
 
+.choice-card.choice-swiped-out {
+  opacity: 0.4;
+  transform: scale(0.96);
+  pointer-events: none;
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
 .choice-image-wrap {
   min-height: 0;
   background: #111213;
@@ -919,8 +926,14 @@ h2 {
     width: 100%;
     height: auto;
     min-height: 0;
-    grid-template-columns: 118px minmax(0, 1fr);
     grid-template-rows: auto;
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+
+  .choice-card.choice-swiped-out {
+    opacity: 0.4;
+    transform: scale(0.96);
+    pointer-events: none;
   }
 
   .youtube-choice {
