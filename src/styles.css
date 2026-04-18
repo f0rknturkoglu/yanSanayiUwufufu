@@ -548,11 +548,14 @@ h2 {
   box-shadow: 0 22px 52px rgba(18, 20, 22, 0.15);
 }
 
-.choice-card.choice-swiped-out {
-  opacity: 0.4;
-  transform: scale(0.96);
-  pointer-events: none;
-  transition: opacity 240ms ease, transform 240ms ease;
+.choice-card.swipeable {
+  cursor: grab;
+  touch-action: pan-y;
+  will-change: transform;
+}
+
+.choice-card.swipeable:active {
+  cursor: grabbing;
 }
 
 .choice-image-wrap {
@@ -925,15 +928,15 @@ h2 {
   .choice-card {
     width: 100%;
     height: auto;
-    min-height: 0;
+    min-height: 140px;
     grid-template-rows: auto;
     grid-template-columns: 110px minmax(0, 1fr);
+    user-select: none;
+    -webkit-user-select: none;
   }
 
-  .choice-card.choice-swiped-out {
-    opacity: 0.4;
-    transform: scale(0.96);
-    pointer-events: none;
+  .choice-card.swipeable {
+    border-width: 2px;
   }
 
   .youtube-choice {

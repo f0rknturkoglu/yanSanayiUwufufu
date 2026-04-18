@@ -623,49 +623,153 @@ function Matchup({
   game: GameState;
   onPick: (itemId: string) => void;
 }) {
-  const [swipedSide, setSwipedSide] = useState<"left" | "right" | null>(null);
-  const startXRef = useRef<number | null>(null);
-  const startYRef = useRef<number | null>(null);
+  const pickingRef = useRef(false);
 
-  function handleTouchStart(e: React.TouchEvent<HTMLDivElement>) {
-    startXRef.current = e.touches[0].clientX;
-    startYRef.current = e.touches[0].clientY;
-  }
-
-  function handleTouchEnd(e: React.TouchEvent<HTMLDivElement>) {
-    if (startXRef.current === null) return;
-    const deltaX = e.changedTouches[0].clientX - startXRef.current;
-    const deltaY = startYRef.current !== null ? e.changedTouches[0].clientY - startYRef.current : 0;
-    startXRef.current = null;
-    startYRef.current = null;
-
-    if (Math.abs(deltaX) < 40 || Math.abs(deltaY) > Math.abs(deltaX)) return;
-
-    setSwipedSide(deltaX > 0 ? "right" : "left");
-    const pickedId = deltaX > 0 ? rightItem.id : leftItem.id;
+  function handlePick(itemId: string) {
+    if (pickingRef.current) return;
+    pickingRef.current = true;
+    onPick(itemId);
     setTimeout(() => {
-      setSwipedSide(null);
-      onPick(pickedId);
-    }, 280);
+      pickingRef.current = false;
+    }, 400);
   }
 
   return (
-    <div
-      className="matchup"
-      data-round={game.currentRoundIndex}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <SongChoice item={leftItem} side="left" onPick={onPick} swipedOut={swipedSide === "right"} />
+    <div className="matchup" data-round={game.currentRoundIndex}>
+      <SwipeableCard item={leftItem} side="left" onPick={handlePick} />
       <div className="versus" aria-hidden="true">
         VS
       </div>
-      <SongChoice item={rightItem} side="right" onPick={onPick} swipedOut={swipedSide === "left"} />
+      <SwipeableCard item={rightItem} side="right" onPick={handlePick} />
     </div>
   );
 }
 
-function SongChoice({ item, side, onPick, swipedOut }: { item: PackItem; side: "left" | "right"; onPick: (itemId: string) => void; swipedOut?: boolean }) {
+function SwipeableCard({
+  item,
+  side,
+  onPick,
+}: {
+  item: PackItem;
+  side: "left" | "right";
+  onPick: (itemId: string) => void;
+}) {
+  const [dragX, setDragX] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const startRef = useRef<{ x: number; y: number; time: number } | null>(null);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    if (isAnimating) return;
+    startRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, time: Date.now() };
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    if (!startRef.current || isAnimating) return;
+    const deltaX = e.touches[0].clientX - startRef.current.x;
+    setDragX(deltaX * 0.6);
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (!startRef.current || isAnimating) return;
+    const deltaX = e.changedTouches[0].clientX - startRef.current.x;
+    const deltaY = e.changedTouches[0].clientY - startRef.current.y;
+    startRef.current = null;
+
+    if (Math.abs(deltaX) < 50 || Math.abs(deltaY) > Math.abs(deltaX) * 1.2) {
+      setDragX(0);
+      return;
+    }
+
+    setIsAnimating(true);
+    setDragX(deltaX > 0 ? 300 : -300);
+    setTimeout(() => {
+      onPick(item.id);
+      setDragX(0);
+      setIsAnimating(false);
+    }, 240);
+  }
+
+  function handleMouseDown(e: React.MouseEvent) {
+    if (isAnimating) return;
+    startRef.current = { x: e.clientX, y: e.clientY, time: Date.now() };
+
+    function onMove(moveEvent: MouseEvent) {
+      if (!startRef.current) return;
+      setDragX((moveEvent.clientX - startRef.current.x) * 0.6);
+    }
+
+    function onUp(upEvent: MouseEvent) {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      if (!startRef.current || isAnimating) return;
+      const deltaX = upEvent.clientX - startRef.current.x;
+      const deltaY = upEvent.clientY - startRef.current.y;
+      startRef.current = null;
+
+      if (Math.abs(deltaX) < 50 || Math.abs(deltaY) > Math.abs(deltaX) * 1.2) {
+        setDragX(0);
+        return;
+      }
+
+      setIsAnimating(true);
+      setDragX(deltaX > 0 ? 300 : -300);
+      setTimeout(() => {
+        onPick(item.id);
+        setDragX(0);
+        setIsAnimating(false);
+      }, 240);
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }
+
+  const slideStyle = dragX !== 0 ? { transform: `translateX(${dragX}px) rotate(${dragX * 0.04}deg)`, transition: isAnimating ? "transform 220ms ease-out" : "transform 80ms ease-out" } : undefined;
+
+  return (
+    <SongChoice
+      item={item}
+      side={side}
+      onPick={onPick}
+      slideStyle={slideStyle}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+    />
+  );
+}
+
+function SongChoice({
+  item,
+  side,
+  onPick,
+  slideStyle,
+  onTouchStart,
+  onTouchMove,
+  onTouchEnd,
+  onMouseDown,
+}: {
+  item: PackItem;
+  side: "left" | "right";
+  onPick: (itemId: string) => void;
+  slideStyle?: React.CSSProperties;
+  onTouchStart?: React.TouchEventHandler;
+  onTouchMove?: React.TouchEventHandler;
+  onTouchEnd?: React.TouchEventHandler;
+  onMouseDown?: React.MouseEventHandler;
+}) {
+  const interactiveProps = slideStyle
+    ? {
+        onTouchStart,
+        onTouchMove,
+        onTouchEnd,
+        onMouseDown,
+        style: slideStyle,
+        className: "choice-card swipeable",
+      }
+    : { className: "choice-card" };
+
   if (isYouTubeItem(item)) {
     return (
       <article className={`youtube-choice youtube-${side}`}>
@@ -694,7 +798,11 @@ function SongChoice({ item, side, onPick, swipedOut }: { item: PackItem; side: "
   }
 
   return (
-    <button className={`choice-card choice-${side}${swipedOut ? " choice-swiped-out" : ""}`} type="button" onClick={() => onPick(item.id)}>
+    <button
+      type="button"
+      onClick={() => onPick(item.id)}
+      {...interactiveProps}
+    >
       <span className="choice-image-wrap">
         <img src={getArtworkSrc(item)} alt={`${item.artist} - ${item.title}`} onError={handleImageFallback} />
       </span>
