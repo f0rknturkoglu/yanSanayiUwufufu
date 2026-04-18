@@ -64,8 +64,6 @@ export function convertSpotifyEmbedToPack({ html, playlistUrl, limit = DEFAULT_L
         return [];
       }
 
-      const trackCoverUrl = getTrackCoverUrl(track) || playlistCoverUrl;
-
       return [
         {
           id: `sp-${trackId}`,
@@ -76,7 +74,7 @@ export function convertSpotifyEmbedToPack({ html, playlistUrl, limit = DEFAULT_L
           spotifyTrackId: trackId,
           spotifyUrl: `https://open.spotify.com/track/${trackId}`,
           durationSeconds: Number.isFinite(track.duration) ? Math.round(track.duration / 1000) : undefined,
-          thumbnailUrl: trackCoverUrl,
+          thumbnailUrl: playlistCoverUrl,
           sourceRefs: [{ label: "Spotify playlist", url: playlistUrl }],
         },
       ];
@@ -141,12 +139,34 @@ function getPlaylistCoverUrl(entity) {
   return url;
 }
 
-function getTrackCoverUrl(track) {
-  const images = track.imageUrl
-    ? [{ url: track.imageUrl }]
-    : track.image?.sources ?? track.coverArt?.sources ?? [];
-  const sorted = [...images].sort((left, right) => (right.maxWidth ?? right.width ?? 0) - (left.maxWidth ?? left.width ?? 0));
-  return sorted[0]?.url || null;
+export async function fetchTrackCovers(trackIds, { concurrency = 6 } = {}) {
+  const covers = new Map();
+  const batch_size = concurrency;
+  const ids = [...new Set(trackIds)];
+
+  for (let i = 0; i < ids.length; i += batch_size) {
+    const batch = ids.slice(i, i + batch_size);
+    const results = await Promise.allSettled(
+      batch.map(async (id) => {
+        const url = `https://open.spotify.com/oembed?url=https://open.spotify.com/track/${id}`;
+        const res = await fetch(url, {
+          headers: { Accept: "application/json" },
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return { id, url: data.thumbnail_url || null };
+      }),
+    );
+
+    for (const result of results) {
+      if (result.status === "fulfilled" && result.value) {
+        covers.set(result.value.id, result.value.url);
+      }
+    }
+  }
+
+  return covers;
 }
 
 function parseSpotifyTrackId(uri) {

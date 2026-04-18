@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { convertSpotifyEmbedToPack, parseSpotifyPlaylistId } from "./spotify-pack-utils.mjs";
+import { describe, expect, it, vi } from "vitest";
+import { convertSpotifyEmbedToPack, fetchTrackCovers, parseSpotifyPlaylistId } from "./spotify-pack-utils.mjs";
 
 const html = `<script id="__NEXT_DATA__" type="application/json">${JSON.stringify({
   props: {
@@ -9,7 +9,7 @@ const html = `<script id="__NEXT_DATA__" type="application/json">${JSON.stringif
           entity: {
             type: "playlist",
             id: "37i9dQZF1DXcBWIGoYBM5M",
-            title: "Today’s Top Hits",
+            title: "Today's Top Hits",
             subtitle: "Spotify",
             visualIdentity: {
               image: [
@@ -50,7 +50,7 @@ describe("spotify pack utils", () => {
     );
   });
 
-  it("converts Spotify embed metadata into a cover-card pack", () => {
+  it("converts Spotify embed metadata into a cover-card pack with playlist cover fallback", () => {
     const pack = convertSpotifyEmbedToPack({
       html,
       playlistUrl: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
@@ -66,5 +66,37 @@ describe("spotify pack utils", () => {
       spotifyTrackId: "5BZsQlgw21vDOAjoqkNgKb",
       thumbnailUrl: "https://i.scdn.co/image/ab67706f00000002ef2111dd20e0445ba6f61673",
     });
+  });
+
+  it("fetchTrackCovers returns a map of track ID to cover URL via oEmbed", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        thumbnail_url: "https://image-cdn.spotifycdn.com/image/ab67616d00001e02fake123",
+      }),
+    });
+    vi.stubGlobal("fetch", mockFetch);
+
+    const covers = await fetchTrackCovers(["5BZsQlgw21vDOAjoqkNgKb", "7yNf9YjeO5JXUE3JEBgnYc"]);
+
+    expect(covers.get("5BZsQlgw21vDOAjoqkNgKb")).toBe("https://image-cdn.spotifycdn.com/image/ab67616d00001e02fake123");
+    expect(covers.get("7yNf9YjeO5JXUE3JEBgnYc")).toBe("https://image-cdn.spotifycdn.com/image/ab67616d00001e02fake123");
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+
+    vi.restoreAllMocks();
+  });
+
+  it("fetchTrackCovers gracefully handles failures", async () => {
+    const mockFetch = vi.fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ thumbnail_url: "https://example.com/cover.jpg" }) })
+      .mockResolvedValueOnce({ ok: false, statusText: "Not Found" });
+    vi.stubGlobal("fetch", mockFetch);
+
+    const covers = await fetchTrackCovers(["abc123", "def456"]);
+
+    expect(covers.get("abc123")).toBe("https://example.com/cover.jpg");
+    expect(covers.has("def456")).toBe(false);
+
+    vi.restoreAllMocks();
   });
 });
