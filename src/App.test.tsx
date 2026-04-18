@@ -68,6 +68,8 @@ describe("App", () => {
     fireEvent.change(screen.getByLabelText("Playlist URL"), {
       target: { value: "https://www.youtube.com/playlist?list=PL1234567890" },
     });
+    expect(screen.getByText("YouTube playlist algılandı.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Spotify" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "URL'den kaydet" }));
 
     await screen.findByText("Fixture YouTube Pack kaydedildi. 8 video eklendi.");
@@ -80,6 +82,27 @@ describe("App", () => {
       }),
     );
     expect(screen.getByDisplayValue("Fixture YouTube Pack")).toBeInTheDocument();
+  });
+
+  it("selects a matchup card with a mobile swipe gesture", async () => {
+    const { container } = render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Başlat" }));
+
+    const leftShell = container.querySelector<HTMLElement>(".swipe-shell-left");
+    expect(leftShell).not.toBeNull();
+
+    fireEvent.touchStart(leftShell!, {
+      touches: [{ clientX: 20, clientY: 220 }],
+    });
+    fireEvent.touchMove(leftShell!, {
+      touches: [{ clientX: 135, clientY: 224 }],
+    });
+    fireEvent.touchEnd(leftShell!, {
+      changedTouches: [{ clientX: 160, clientY: 226 }],
+    });
+
+    await screen.findByText("1 / 63");
   });
 
   it("toggles side panels and persists UI preferences", () => {
@@ -129,6 +152,8 @@ describe("App", () => {
     fireEvent.change(screen.getByLabelText("Playlist URL"), {
       target: { value: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M" },
     });
+    expect(screen.getByText("Spotify playlist algılandı.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Şarkı limiti")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "URL'den kaydet" }));
 
     await screen.findByText("Fixture Spotify Pack kaydedildi. 8 şarkı eklendi.");

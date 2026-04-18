@@ -257,6 +257,24 @@ input {
   gap: 8px;
 }
 
+.source-detect {
+  margin: -2px 0 0;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.source-detect-youtube {
+  color: #b3261e;
+}
+
+.source-detect-spotify {
+  color: #0b6b4f;
+}
+
+.source-detect-unknown {
+  color: #8a6700;
+}
+
 .secondary-action {
   min-height: 44px;
   border: 1px solid var(--line);
@@ -521,6 +539,52 @@ h2 {
   grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr);
   align-items: center;
   gap: 20px;
+}
+
+.swipe-mobile-hint {
+  display: none;
+}
+
+.swipe-shell {
+  min-width: 0;
+  position: relative;
+  transform: translateX(var(--swipe-x, 0)) rotate(var(--swipe-rotate, 0));
+  transition: transform 120ms ease-out;
+  touch-action: pan-y;
+  will-change: transform;
+}
+
+.swipe-shell.is-throwing {
+  transition: transform 180ms cubic-bezier(0.18, 0.72, 0.22, 1);
+}
+
+.swipe-shell .choice-card,
+.swipe-shell .youtube-choice {
+  width: 100%;
+}
+
+.swipe-feedback {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 4;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  background: rgba(18, 20, 22, 0.82);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 1000;
+  opacity: var(--swipe-progress, 0);
+  pointer-events: none;
+  transform: translateY(calc((1 - var(--swipe-progress, 0)) * 8px));
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+.swipe-feedback-left {
+  right: 18px;
+  left: auto;
 }
 
 .choice-card {
@@ -923,6 +987,15 @@ h2 {
   .matchup {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .swipe-mobile-hint {
+    display: block;
+    margin: -4px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 900;
+    text-align: center;
   }
 
   .choice-card {

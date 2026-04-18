@@ -1,7 +1,7 @@
 import http from "node:http";
 import { createServer as createViteServer } from "vite";
 import { convertPlaylistToPack, readPlaylistWithYtDlp, readPlaylistWithYouTubePage } from "./youtube-pack-utils.mjs";
-import { convertSpotifyEmbedToPack, readSpotifyEmbedPlaylist } from "./spotify-pack-utils.mjs";
+import { applyTrackCovers, convertSpotifyEmbedToPack, fetchTrackCovers, readSpotifyEmbedPlaylist } from "./spotify-pack-utils.mjs";
 
 const { host, port } = parseArgs(process.argv.slice(2));
 
@@ -79,8 +79,10 @@ async function handleSpotifyPlaylist(req, res) {
 
     const { html } = await readSpotifyEmbedPlaylist(playlistUrl, { limit });
     const pack = convertSpotifyEmbedToPack({ html, playlistUrl, limit });
+    const trackIds = pack.items.map((item) => item.spotifyTrackId).filter(Boolean);
+    const covers = await fetchTrackCovers(trackIds);
 
-    sendJson(res, 200, { pack });
+    sendJson(res, 200, { pack: applyTrackCovers(pack, covers) });
   } catch (error) {
     sendJson(res, 500, {
       error: error instanceof Error ? error.message : "Spotify playlist could not be converted.",

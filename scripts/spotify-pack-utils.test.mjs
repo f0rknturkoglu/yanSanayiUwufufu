@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { convertSpotifyEmbedToPack, fetchTrackCovers, parseSpotifyPlaylistId } from "./spotify-pack-utils.mjs";
+import { applyTrackCovers, convertSpotifyEmbedToPack, fetchTrackCovers, parseSpotifyPlaylistId } from "./spotify-pack-utils.mjs";
 
 const html = `<script id="__NEXT_DATA__" type="application/json">${JSON.stringify({
   props: {
@@ -35,6 +35,18 @@ const html = `<script id="__NEXT_DATA__" type="application/json">${JSON.stringif
               subtitle,
               duration: 180000,
               entityType: "track",
+              visualIdentity:
+                id === "5BZsQlgw21vDOAjoqkNgKb"
+                  ? {
+                      image: [
+                        {
+                          url: "https://i.scdn.co/image/ab67616d00001e02trackcover",
+                          maxWidth: 640,
+                          maxHeight: 640,
+                        },
+                      ],
+                    }
+                  : undefined,
             })),
           },
         },
@@ -50,7 +62,7 @@ describe("spotify pack utils", () => {
     );
   });
 
-  it("converts Spotify embed metadata into a cover-card pack with playlist cover fallback", () => {
+  it("converts Spotify embed metadata into a cover-card pack with track covers before playlist fallback", () => {
     const pack = convertSpotifyEmbedToPack({
       html,
       playlistUrl: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
@@ -64,8 +76,22 @@ describe("spotify pack utils", () => {
       title: "DAISIES",
       artist: "Justin Bieber",
       spotifyTrackId: "5BZsQlgw21vDOAjoqkNgKb",
-      thumbnailUrl: "https://i.scdn.co/image/ab67706f00000002ef2111dd20e0445ba6f61673",
+      thumbnailUrl: "https://i.scdn.co/image/ab67616d00001e02trackcover",
     });
+    expect(pack.items[1].thumbnailUrl).toBe("https://i.scdn.co/image/ab67706f00000002ef2111dd20e0445ba6f61673");
+  });
+
+  it("applies fetched track covers over fallback thumbnails", () => {
+    const pack = convertSpotifyEmbedToPack({
+      html,
+      playlistUrl: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
+      limit: 8,
+    });
+    const covers = new Map([["7yNf9YjeO5JXUE3JEBgnYc", "https://image-cdn.spotifycdn.com/image/song-cover"]]);
+
+    applyTrackCovers(pack, covers);
+
+    expect(pack.items[1].thumbnailUrl).toBe("https://image-cdn.spotifycdn.com/image/song-cover");
   });
 
   it("fetchTrackCovers returns a map of track ID to cover URL via oEmbed", async () => {

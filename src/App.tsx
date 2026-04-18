@@ -1,4 +1,12 @@
-import { ChangeEvent, FormEvent, SyntheticEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type {
+  ChangeEvent,
+  CSSProperties,
+  FormEvent,
+  MouseEvent as ReactMouseEvent,
+  SyntheticEvent,
+  TouchEvent as ReactTouchEvent,
+} from "react";
 import type { BracketSize, GameState, PackItem, SavedSession, SongPack } from "./types";
 import { builtInPacks } from "./data/packs";
 import { createGame, getCurrentMatch, getProgress, getRanking, getRoundLabel, selectWinner, undoLastChoice } from "./lib/bracket";
@@ -23,8 +31,9 @@ const CATEGORY_LABELS: Record<PackItem["category"], string> = {
 const BRACKET_SIZES = VALID_BRACKET_SIZES;
 
 type Notice = { tone: "good" | "bad" | "info"; text: string } | undefined;
+type PlaylistSource = "youtube" | "spotify";
 
-function detectPlaylistSource(url: string): "youtube" | "spotify" | null {
+function detectPlaylistSource(url: string): PlaylistSource | null {
   const trimmed = url.trim();
   if (/youtube\.com|youtu\.be/i.test(trimmed)) return "youtube";
   if (/open\.spotify\.com|spotify\.com/i.test(trimmed)) return "spotify";
@@ -69,8 +78,9 @@ export default function App() {
     .filter(Boolean)
     .join(" ");
   const detectedSource = detectPlaylistSource(playlistUrl);
-  const playlistLimitLabel = detectedSource === "youtube" ? "Video limiti" : "Şarkı limiti";
-  const playlistLimitUnit = detectedSource === "youtube" ? "video" : "şarkı";
+  const playlistLimitLabel =
+    detectedSource === "youtube" ? "Video limiti" : detectedSource === "spotify" ? "Şarkı limiti" : "İçerik limiti";
+  const playlistLimitUnit = detectedSource === "youtube" ? "video" : detectedSource === "spotify" ? "şarkı" : "adet";
 
   useEffect(() => {
     sessionRef.current = session;
@@ -423,6 +433,15 @@ export default function App() {
               placeholder="YouTube veya Spotify playlist linki yapıştırın"
               onChange={(event) => setPlaylistUrl(event.target.value)}
             />
+            {playlistUrl.trim() ? (
+              <p className={`source-detect source-detect-${detectedSource ?? "unknown"}`}>
+                {detectedSource === "youtube"
+                  ? "YouTube playlist algılandı."
+                  : detectedSource === "spotify"
+                    ? "Spotify playlist algılandı."
+                    : "YouTube veya Spotify playlist linki bekleniyor."}
+              </p>
+            ) : null}
             <div className="playlist-row">
               <label className="visually-hidden" htmlFor="playlist-limit">
                 {playlistLimitLabel}
@@ -636,6 +655,7 @@ function Matchup({
 
   return (
     <div className="matchup" data-round={game.currentRoundIndex}>
+      <p className="swipe-mobile-hint">Kartı yana kaydırarak seçebilirsin.</p>
       <SwipeableCard item={leftItem} side="left" onPick={handlePick} />
       <div className="versus" aria-hidden="true">
         VS
@@ -657,45 +677,75 @@ function SwipeableCard({
   const [dragX, setDragX] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const startRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const suppressClickRef = useRef(false);
 
-  function handleTouchStart(e: React.TouchEvent) {
-    if (isAnimating) return;
-    startRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, time: Date.now() };
+  const swipeProgress = Math.min(Math.abs(dragX) / 120, 1);
+  const swipeDirection = dragX >= 0 ? "right" : "left";
+  const swipeStyle = {
+    "--swipe-x": `${dragX}px`,
+    "--swipe-rotate": `${dragX * 0.035}deg`,
+    "--swipe-progress": String(swipeProgress),
+  } as CSSProperties;
+
+  function resetSwipe() {
+    setDragX(0);
+    setIsAnimating(false);
   }
 
-  function handleTouchMove(e: React.TouchEvent) {
-    if (!startRef.current || isAnimating) return;
-    const deltaX = e.touches[0].clientX - startRef.current.x;
-    setDragX(deltaX * 0.6);
-  }
-
-  function handleTouchEnd(e: React.TouchEvent) {
-    if (!startRef.current || isAnimating) return;
-    const deltaX = e.changedTouches[0].clientX - startRef.current.x;
-    const deltaY = e.changedTouches[0].clientY - startRef.current.y;
-    startRef.current = null;
-
-    if (Math.abs(deltaX) < 50 || Math.abs(deltaY) > Math.abs(deltaX) * 1.2) {
+  function finishSwipe(deltaX: number, deltaY: number) {
+    if (Math.abs(deltaX) < 62 || Math.abs(deltaY) > Math.abs(deltaX) * 1.1) {
       setDragX(0);
       return;
     }
 
+    suppressClickRef.current = true;
     setIsAnimating(true);
-    setDragX(deltaX > 0 ? 300 : -300);
+    setDragX(deltaX > 0 ? 420 : -420);
     setTimeout(() => {
       onPick(item.id);
-      setDragX(0);
-      setIsAnimating(false);
-    }, 240);
+      resetSwipe();
+      window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 0);
+    }, 180);
   }
 
-  function handleMouseDown(e: React.MouseEvent) {
+  function handleDirectPick() {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+
+    onPick(item.id);
+  }
+
+  function handleTouchStart(e: ReactTouchEvent) {
+    if (isAnimating) return;
+    startRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, time: Date.now() };
+  }
+
+  function handleTouchMove(e: ReactTouchEvent) {
+    if (!startRef.current || isAnimating) return;
+    const deltaX = e.touches[0].clientX - startRef.current.x;
+    setDragX(Math.max(-150, Math.min(150, deltaX * 0.75)));
+  }
+
+  function handleTouchEnd(e: ReactTouchEvent) {
+    if (!startRef.current || isAnimating) return;
+    const deltaX = e.changedTouches[0].clientX - startRef.current.x;
+    const deltaY = e.changedTouches[0].clientY - startRef.current.y;
+    startRef.current = null;
+    finishSwipe(deltaX, deltaY);
+  }
+
+  function handleMouseDown(e: ReactMouseEvent) {
     if (isAnimating) return;
     startRef.current = { x: e.clientX, y: e.clientY, time: Date.now() };
 
     function onMove(moveEvent: MouseEvent) {
       if (!startRef.current) return;
-      setDragX((moveEvent.clientX - startRef.current.x) * 0.6);
+      const deltaX = moveEvent.clientX - startRef.current.x;
+      setDragX(Math.max(-150, Math.min(150, deltaX * 0.75)));
     }
 
     function onUp(upEvent: MouseEvent) {
@@ -705,38 +755,27 @@ function SwipeableCard({
       const deltaX = upEvent.clientX - startRef.current.x;
       const deltaY = upEvent.clientY - startRef.current.y;
       startRef.current = null;
-
-      if (Math.abs(deltaX) < 50 || Math.abs(deltaY) > Math.abs(deltaX) * 1.2) {
-        setDragX(0);
-        return;
-      }
-
-      setIsAnimating(true);
-      setDragX(deltaX > 0 ? 300 : -300);
-      setTimeout(() => {
-        onPick(item.id);
-        setDragX(0);
-        setIsAnimating(false);
-      }, 240);
+      finishSwipe(deltaX, deltaY);
     }
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
   }
 
-  const slideStyle = dragX !== 0 ? { transform: `translateX(${dragX}px) rotate(${dragX * 0.04}deg)`, transition: isAnimating ? "transform 220ms ease-out" : "transform 80ms ease-out" } : undefined;
-
   return (
-    <SongChoice
-      item={item}
-      side={side}
-      onPick={onPick}
-      slideStyle={slideStyle}
+    <div
+      className={`swipe-shell swipe-shell-${side} ${isAnimating ? "is-throwing" : ""}`}
+      style={swipeStyle}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
-    />
+    >
+      <SongChoice item={item} side={side} onPick={handleDirectPick} />
+      <span className={`swipe-feedback swipe-feedback-${swipeDirection}`} aria-hidden="true">
+        {swipeDirection === "right" ? "Sağa kaydır" : "Sola kaydır"}
+      </span>
+    </div>
   );
 }
 
@@ -744,32 +783,11 @@ function SongChoice({
   item,
   side,
   onPick,
-  slideStyle,
-  onTouchStart,
-  onTouchMove,
-  onTouchEnd,
-  onMouseDown,
 }: {
   item: PackItem;
   side: "left" | "right";
   onPick: (itemId: string) => void;
-  slideStyle?: React.CSSProperties;
-  onTouchStart?: React.TouchEventHandler;
-  onTouchMove?: React.TouchEventHandler;
-  onTouchEnd?: React.TouchEventHandler;
-  onMouseDown?: React.MouseEventHandler;
 }) {
-  const interactiveProps = slideStyle
-    ? {
-        onTouchStart,
-        onTouchMove,
-        onTouchEnd,
-        onMouseDown,
-        style: slideStyle,
-        className: "choice-card swipeable",
-      }
-    : { className: "choice-card" };
-
   if (isYouTubeItem(item)) {
     return (
       <article className={`youtube-choice youtube-${side}`}>
@@ -798,11 +816,7 @@ function SongChoice({
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => onPick(item.id)}
-      {...interactiveProps}
-    >
+    <button className={`choice-card choice-${side}`} type="button" onClick={() => onPick(item.id)}>
       <span className="choice-image-wrap">
         <img src={getArtworkSrc(item)} alt={`${item.artist} - ${item.title}`} onError={handleImageFallback} />
       </span>

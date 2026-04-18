@@ -1,4 +1,4 @@
-import { convertSpotifyEmbedToPack, fetchTrackCovers, readSpotifyEmbedPlaylist } from "../scripts/spotify-pack-utils.mjs";
+import { applyTrackCovers, convertSpotifyEmbedToPack, fetchTrackCovers, readSpotifyEmbedPlaylist } from "../scripts/spotify-pack-utils.mjs";
 import { normalizeLimit, readJsonBody, rejectNonPost, sendJson } from "./_utils.js";
 
 export default async function handler(req, res) {
@@ -18,20 +18,10 @@ export default async function handler(req, res) {
 
     const { html } = await readSpotifyEmbedPlaylist(playlistUrl, { limit });
     const pack = convertSpotifyEmbedToPack({ html, playlistUrl, limit });
-
     const trackIds = pack.items.map((item) => item.spotifyTrackId).filter(Boolean);
     const covers = await fetchTrackCovers(trackIds);
 
-    for (const item of pack.items) {
-      if (item.spotifyTrackId && covers.has(item.spotifyTrackId)) {
-        const trackCover = covers.get(item.spotifyTrackId);
-        if (trackCover) {
-          item.thumbnailUrl = trackCover;
-        }
-      }
-    }
-
-    sendJson(res, 200, { pack });
+    sendJson(res, 200, { pack: applyTrackCovers(pack, covers) });
   } catch (error) {
     sendJson(res, 500, {
       error: error instanceof Error ? error.message : "Spotify playlist could not be converted.",

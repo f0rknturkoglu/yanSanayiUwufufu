@@ -74,7 +74,7 @@ export function convertSpotifyEmbedToPack({ html, playlistUrl, limit = DEFAULT_L
           spotifyTrackId: trackId,
           spotifyUrl: `https://open.spotify.com/track/${trackId}`,
           durationSeconds: Number.isFinite(track.duration) ? Math.round(track.duration / 1000) : undefined,
-          thumbnailUrl: playlistCoverUrl,
+          thumbnailUrl: getTrackCoverUrl(track) || playlistCoverUrl,
           sourceRefs: [{ label: "Spotify playlist", url: playlistUrl }],
         },
       ];
@@ -129,8 +129,7 @@ function extractNextData(html) {
 
 function getPlaylistCoverUrl(entity) {
   const images = entity.visualIdentity?.image ?? entity.coverArt?.sources ?? [];
-  const sorted = [...images].sort((left, right) => (right.maxWidth ?? right.width ?? 0) - (left.maxWidth ?? left.width ?? 0));
-  const url = sorted[0]?.url;
+  const url = getBestImageUrl(images);
 
   if (!url) {
     throw new Error("Spotify playlist cover image was not found.");
@@ -139,21 +138,42 @@ function getPlaylistCoverUrl(entity) {
   return url;
 }
 
-export async function fetchTrackCovers(trackIds, { concurrency = 6 } = {}) {
-  const covers = new Map();
-  const batch_size = concurrency;
-  const ids = [...new Set(trackIds)];
+export function applyTrackCovers(pack, covers) {
+  for (const item of pack.items) {
+    if (item.spotifyTrackId && covers.has(item.spotifyTrackId)) {
+      const trackCover = covers.get(item.spotifyTrackId);
 
-  for (let i = 0; i < ids.length; i += batch_size) {
-    const batch = ids.slice(i, i + batch_size);
+      if (trackCover) {
+        item.thumbnailUrl = trackCover;
+      }
+    }
+  }
+
+  return pack;
+}
+
+export async function fetchTrackCovers(trackIds, { concurrency = 8, timeoutMs = 4000, maxTotalMs = 12_000 } = {}) {
+  const covers = new Map();
+  const batchSize = Math.max(1, concurrency);
+  const ids = [...new Set(trackIds)];
+  const startedAt = Date.now();
+
+  for (let i = 0; i < ids.length; i += batchSize) {
+    if (Date.now() - startedAt > maxTotalMs) {
+      break;
+    }
+
+    const batch = ids.slice(i, i + batchSize);
     const results = await Promise.allSettled(
       batch.map(async (id) => {
         const url = `https://open.spotify.com/oembed?url=https://open.spotify.com/track/${id}`;
         const res = await fetch(url, {
           headers: { Accept: "application/json" },
-          signal: AbortSignal.timeout(8000),
+          signal: createTimeoutSignal(timeoutMs),
         });
+
         if (!res.ok) return null;
+
         const data = await res.json();
         return { id, url: data.thumbnail_url || null };
       }),
@@ -167,6 +187,33 @@ export async function fetchTrackCovers(trackIds, { concurrency = 6 } = {}) {
   }
 
   return covers;
+}
+
+function getTrackCoverUrl(track) {
+  return (
+    getBestImageUrl(track?.visualIdentity?.image) ||
+    getBestImageUrl(track?.coverArt?.sources) ||
+    getBestImageUrl(track?.albumOfTrack?.coverArt?.sources) ||
+    getBestImageUrl(track?.album?.coverArt?.sources) ||
+    getBestImageUrl(track?.images)
+  );
+}
+
+function getBestImageUrl(images) {
+  if (!Array.isArray(images) || images.length === 0) {
+    return "";
+  }
+
+  const sorted = [...images].sort((left, right) => (right.maxWidth ?? right.width ?? 0) - (left.maxWidth ?? left.width ?? 0));
+  return sorted[0]?.url ?? "";
+}
+
+function createTimeoutSignal(timeoutMs) {
+  if (typeof AbortSignal === "undefined" || typeof AbortSignal.timeout !== "function") {
+    return undefined;
+  }
+
+  return AbortSignal.timeout(timeoutMs);
 }
 
 function parseSpotifyTrackId(uri) {
