@@ -53,7 +53,7 @@ export function convertSpotifyEmbedToPack({ html, playlistUrl, limit = DEFAULT_L
 
   const playlistId = entity.id || parseSpotifyPlaylistId(playlistUrl);
   const title = entity.title || entity.name || `Spotify Playlist ${playlistId}`;
-  const coverUrl = getBestCoverUrl(entity);
+  const playlistCoverUrl = getPlaylistCoverUrl(entity);
   const items = entity.trackList
     .filter((track) => track?.entityType === "track")
     .slice(0, limit)
@@ -63,6 +63,8 @@ export function convertSpotifyEmbedToPack({ html, playlistUrl, limit = DEFAULT_L
       if (!trackId) {
         return [];
       }
+
+      const trackCoverUrl = getTrackCoverUrl(track) || playlistCoverUrl;
 
       return [
         {
@@ -74,7 +76,7 @@ export function convertSpotifyEmbedToPack({ html, playlistUrl, limit = DEFAULT_L
           spotifyTrackId: trackId,
           spotifyUrl: `https://open.spotify.com/track/${trackId}`,
           durationSeconds: Number.isFinite(track.duration) ? Math.round(track.duration / 1000) : undefined,
-          thumbnailUrl: coverUrl,
+          thumbnailUrl: trackCoverUrl,
           sourceRefs: [{ label: "Spotify playlist", url: playlistUrl }],
         },
       ];
@@ -127,7 +129,7 @@ function extractNextData(html) {
   return JSON.parse(decodeHtml(match[1]));
 }
 
-function getBestCoverUrl(entity) {
+function getPlaylistCoverUrl(entity) {
   const images = entity.visualIdentity?.image ?? entity.coverArt?.sources ?? [];
   const sorted = [...images].sort((left, right) => (right.maxWidth ?? right.width ?? 0) - (left.maxWidth ?? left.width ?? 0));
   const url = sorted[0]?.url;
@@ -137,6 +139,14 @@ function getBestCoverUrl(entity) {
   }
 
   return url;
+}
+
+function getTrackCoverUrl(track) {
+  const images = track.imageUrl
+    ? [{ url: track.imageUrl }]
+    : track.image?.sources ?? track.coverArt?.sources ?? [];
+  const sorted = [...images].sort((left, right) => (right.maxWidth ?? right.width ?? 0) - (left.maxWidth ?? left.width ?? 0));
+  return sorted[0]?.url || null;
 }
 
 function parseSpotifyTrackId(uri) {

@@ -23,14 +23,19 @@ const CATEGORY_LABELS: Record<PackItem["category"], string> = {
 const BRACKET_SIZES = VALID_BRACKET_SIZES;
 
 type Notice = { tone: "good" | "bad" | "info"; text: string } | undefined;
-type PlaylistSource = "youtube" | "spotify";
+
+function detectPlaylistSource(url: string): "youtube" | "spotify" | null {
+  const trimmed = url.trim();
+  if (/youtube\.com|youtu\.be/i.test(trimmed)) return "youtube";
+  if (/open\.spotify\.com|spotify\.com/i.test(trimmed)) return "spotify";
+  return null;
+}
 
 export default function App() {
   const [session, setSession] = useState<SavedSession>(() => loadSession());
   const sessionRef = useRef(session);
   const [notice, setNotice] = useState<Notice>();
   const [playlistUrl, setPlaylistUrl] = useState("");
-  const [playlistSource, setPlaylistSource] = useState<PlaylistSource>("youtube");
   const [playlistLimit, setPlaylistLimit] = useState<BracketSize>(128);
   const [isConvertingPlaylist, setIsConvertingPlaylist] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,8 +68,9 @@ export default function App() {
   ]
     .filter(Boolean)
     .join(" ");
-  const playlistLimitLabel = playlistSource === "youtube" ? "Video limiti" : "Şarkı limiti";
-  const playlistLimitUnit = playlistSource === "youtube" ? "video" : "şarkı";
+  const detectedSource = detectPlaylistSource(playlistUrl);
+  const playlistLimitLabel = detectedSource === "youtube" ? "Video limiti" : "Şarkı limiti";
+  const playlistLimitUnit = detectedSource === "youtube" ? "video" : "şarkı";
 
   useEffect(() => {
     sessionRef.current = session;
@@ -252,11 +258,18 @@ export default function App() {
       return;
     }
 
+    const source = detectPlaylistSource(trimmedUrl);
+
+    if (!source) {
+      setNotice({ tone: "bad", text: "URL YouTube veya Spotify linki olarak tanınmadı." });
+      return;
+    }
+
     setIsConvertingPlaylist(true);
     setNotice({ tone: "info", text: "Playlist okunuyor. Büyük listelerde biraz sürebilir." });
 
     try {
-      const endpoint = playlistSource === "youtube" ? "/api/youtube-playlist" : "/api/spotify-playlist";
+      const endpoint = source === "youtube" ? "/api/youtube-playlist" : "/api/spotify-playlist";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -278,7 +291,7 @@ export default function App() {
       setNotice({
         tone: "good",
         text: `${payload.pack.title} kaydedildi. ${payload.pack.items.length} ${
-          playlistSource === "youtube" ? "video" : "şarkı"
+          source === "youtube" ? "video" : "şarkı"
         } eklendi.`,
       });
     } catch (error) {
@@ -403,23 +416,11 @@ export default function App() {
             <label className="field-label" htmlFor="playlist-url">
               Playlist URL
             </label>
-            <div className="source-toggle" role="group" aria-label="Playlist kaynağı">
-              <button type="button" aria-pressed={playlistSource === "youtube"} onClick={() => setPlaylistSource("youtube")}>
-                YouTube
-              </button>
-              <button type="button" aria-pressed={playlistSource === "spotify"} onClick={() => setPlaylistSource("spotify")}>
-                Spotify
-              </button>
-            </div>
             <input
               id="playlist-url"
               type="url"
               value={playlistUrl}
-              placeholder={
-                playlistSource === "youtube"
-                  ? "https://www.youtube.com/playlist?list=..."
-                  : "https://open.spotify.com/playlist/..."
-              }
+              placeholder="YouTube veya Spotify playlist linki yapıştırın"
               onChange={(event) => setPlaylistUrl(event.target.value)}
             />
             <div className="playlist-row">

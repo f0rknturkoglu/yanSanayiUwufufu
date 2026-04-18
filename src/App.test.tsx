@@ -126,8 +126,6 @@ describe("App", () => {
 
     render(<App />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Spotify" }));
-    expect(screen.getByLabelText("Şarkı limiti")).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Playlist URL"), {
       target: { value: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M" },
     });
